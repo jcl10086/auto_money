@@ -131,6 +131,16 @@ def sell_strategy(code, cb_price, enable_amount):
     dq_price = round(get_price(code)[0], 2)
     zf = round((dq_price - cb_price) / cb_price * 100, 2)
 
+    # if max_zf > 0.4 and zf < 0.1:
+    #     gd_price = round(dq_price * 0.999, 2)
+    #     sell(code, gd_price, enable_amount)
+    #     max_zf = 0
+    #     min_zf = 10000
+    #     min_count = 0
+    #     max_price = 0
+    #     min_price = 0
+    #     return True
+
     if zf >= max_zf:
         max_zf = zf
         min_count = 0
@@ -145,7 +155,7 @@ def sell_strategy(code, cb_price, enable_amount):
 
     print(f'{code}  {zf} 成本：{cb_price} 当前：{dq_price} 最大值：{max_price} 最小值：{min_price} 计数：{min_count}')
 
-    if min_count >= 6:
+    if min_count >= 8:
         gd_price = round(dq_price * 0.999, 2)
         sell(code, gd_price, enable_amount)
         max_zf = 0
