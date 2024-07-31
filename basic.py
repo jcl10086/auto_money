@@ -11,10 +11,10 @@ import pywencai
 import pymysql
 
 max_zf = 0
+min_zf = 10000
 min_count = 0
-flag_bb = False
-flag_xy = False
-flag_dy = False
+max_price = 0
+min_price = 0
 
 
 tdx_client = Quotes.factory(market='std')
@@ -124,79 +124,44 @@ def sell(code, gd_price, enable_amount):
 def sell_strategy(code, cb_price, enable_amount):
     global min_count
     global max_zf
-    global flag_bb
-    global flag_xy
-    global flag_dy
+    global min_zf
+    global max_price
+    global min_price
 
-    dq_price = get_price(code)[0]
+    dq_price = round(get_price(code)[0], 2)
     zf = round((dq_price - cb_price) / cb_price * 100, 2)
-    flag_name = '未触发'
-    if flag_bb:
-        flag_name = '触发保本'
-    if flag_xy:
-        flag_name = '触发小盈'
-    if flag_dy:
-        flag_name = '触发大盈'
-    if max_zf >= 5:
-        flag_name = '触发大赚'
-    print(f'{code}  {zf} 成本：{cb_price} 当前：{dq_price} {flag_name}')
 
     if zf >= max_zf:
         max_zf = zf
         min_count = 0
-    else:
+        min_zf = zf
+        max_price = dq_price
+        min_price = dq_price
+
+    if zf < min_zf:
+        min_zf = zf
         min_count = min_count + 1
+        min_price = dq_price
+
+    print(f'{code}  {zf} 成本：{cb_price} 当前：{dq_price} 最大值：{max_price} 最小值：{min_price} 计数：{min_count}')
 
     if min_count >= 6:
         gd_price = round(dq_price * 0.999, 2)
         sell(code, gd_price, enable_amount)
+        max_zf = 0
+        min_zf = 10000
+        min_count = 0
+        max_price = 0
+        min_price = 0
         return True
-
-    # if zf >= 0.5:
-    #     flag_bb = True
-    # if flag_bb and zf <= 0.2:
-    #     gd_price = round(dq_price * 0.999, 2)
-    #     sell(code, gd_price, enable_amount)
-    #     flag_bb = False
-    #     flag_xy = False
-    #     flag_dy = False
-    #     return True
-    #
-    # if zf >= 2:
-    #     flag_xy = True
-    # # 防止卖飞
-    # if flag_xy and zf <= 1.2:
-    #     gd_price = round(dq_price * 0.999, 2)
-    #     sell(code, gd_price, enable_amount)
-    #     flag_bb = False
-    #     flag_xy = False
-    #     flag_dy = False
-    #     return True
-
-    # if zf >= 3:
-    #     flag_dy = True
-    # # 防止卖飞
-    # if flag_dy and zf <= 2.2:
-    #     gd_price = round(dq_price * 0.998, 1)
-    #     sell(code, gd_price, enable_amount)
-    #     flag_bb = False
-    #     flag_xy = False
-    #     flag_dy = False
-    #     return True
-
-    # if max_zf >= 1.5 and zf <= max_zf - 1:
-    #     gd_price = round(dq_price * 0.997, 2)
-    #     sell(code, gd_price, enable_amount)
-    #     flag_bb = False
-    #     flag_xy = False
-    #     flag_dy = False
-    #     return True
 
     if zf <= -2:
         gd_price = round(cb_price * 0.99, 2)
         sell(code, gd_price, enable_amount)
-        flag_bb = False
-        flag_xy = False
-        flag_dy = False
+        max_zf = 0
+        min_zf = 10000
+        min_count = 0
+        max_price = 0
+        min_price = 0
         return True
     return False
