@@ -11,6 +11,7 @@ import pywencai
 import pymysql
 
 max_zf = 0
+min_count = 0
 flag_bb = False
 flag_xy = False
 flag_dy = False
@@ -121,6 +122,7 @@ def sell(code, gd_price, enable_amount):
 
 
 def sell_strategy(code, cb_price, enable_amount):
+    global min_count
     global max_zf
     global flag_bb
     global flag_xy
@@ -139,18 +141,26 @@ def sell_strategy(code, cb_price, enable_amount):
         flag_name = '触发大赚'
     print(f'{code}  {zf} 成本：{cb_price} 当前：{dq_price} {flag_name}')
 
-    if zf > max_zf:
+    if zf >= max_zf:
         max_zf = zf
+        min_count = 0
+    else:
+        min_count = min_count + 1
 
-    if zf >= 0.5:
-        flag_bb = True
-    if flag_bb and zf <= 0.2:
+    if min_count >= 6:
         gd_price = round(dq_price * 0.999, 2)
         sell(code, gd_price, enable_amount)
-        flag_bb = False
-        flag_xy = False
-        flag_dy = False
         return True
+
+    # if zf >= 0.5:
+    #     flag_bb = True
+    # if flag_bb and zf <= 0.2:
+    #     gd_price = round(dq_price * 0.999, 2)
+    #     sell(code, gd_price, enable_amount)
+    #     flag_bb = False
+    #     flag_xy = False
+    #     flag_dy = False
+    #     return True
     #
     # if zf >= 2:
     #     flag_xy = True
@@ -174,15 +184,15 @@ def sell_strategy(code, cb_price, enable_amount):
     #     flag_dy = False
     #     return True
 
-    if max_zf >= 1.5 and zf <= max_zf - 1:
-        gd_price = round(dq_price * 0.997, 2)
-        sell(code, gd_price, enable_amount)
-        flag_bb = False
-        flag_xy = False
-        flag_dy = False
-        return True
+    # if max_zf >= 1.5 and zf <= max_zf - 1:
+    #     gd_price = round(dq_price * 0.997, 2)
+    #     sell(code, gd_price, enable_amount)
+    #     flag_bb = False
+    #     flag_xy = False
+    #     flag_dy = False
+    #     return True
 
-    if zf <= -0.3:
+    if zf <= -2:
         gd_price = round(cb_price * 0.99, 2)
         sell(code, gd_price, enable_amount)
         flag_bb = False

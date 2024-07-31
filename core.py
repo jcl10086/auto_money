@@ -18,19 +18,19 @@ def buy_data():
             info = f'{code} 卖出'
         return info
 
-    df = get_speed(codes)
-    for index, row in df.iterrows():
-        code = row['code']
-        if not get_last_trade(code):
-            break
-        enable_balance = get_balance()
-        balance = enable_balance
-        last_trade = get_last_trade(code)
-        if last_trade:
-            price = row['price']
-            balance = 10000
-            buy_info(code, price, balance)
-            break
+    # df = get_speed(codes)
+    # for index, row in df.iterrows():
+    #     code = row['code']
+    #     if not get_last_trade(code):
+    #         break
+    #     enable_balance = get_balance()
+    #     balance = enable_balance
+    #     last_trade = get_last_trade(code)
+    #     if last_trade:
+    #         price = row['price']
+    #         balance = 10000
+    #         buy_info(code, price, balance)
+    #         break
 
 
 if __name__ == '__main__':
