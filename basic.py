@@ -52,8 +52,9 @@ def get_speed(stock_list):
 def get_last_trade(code):
     flag = False
     data = tdx_client.transaction(symbol=code, start=0, offset=5)
+    prices = data['price'].values
     sum_vol = sum(data['vol'].values)
-    if sum_vol >= 500:
+    if sum_vol >= 500 and prices[4] > prices[0]:
         flag = True
     return flag
 

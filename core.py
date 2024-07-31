@@ -28,7 +28,7 @@ def buy_data():
         last_trade = get_last_trade(code)
         if last_trade:
             price = row['price']
-            # balance = 10000
+            balance = 10000
             buy_info(code, price, balance)
             break
 
