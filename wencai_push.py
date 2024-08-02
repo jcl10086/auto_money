@@ -7,6 +7,8 @@ from mootdx.quotes import Quotes
 import pandas as pd
 import pywencai
 
+import data_util
+
 # 初始化账号
 tdx_client = Quotes.factory(market='std')
 r = redis.Redis(host='192.168.1.4', port=6379, decode_responses=True)
@@ -27,7 +29,10 @@ if __name__ == '__main__':
     while True:
         codes = get_codes()
         for code in codes:
+            if r.exists(code):
+                continue
             r.set(code, 'sb')
-            r.expire(code, 60)
+            r.expire(code, 120)
+            data_util.wx_push(code)
             print(code)
         time.sleep(1)
