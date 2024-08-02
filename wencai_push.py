@@ -20,6 +20,9 @@ def convert_to_code(code):
 
 def get_codes():
     df = pywencai.get(query='涨幅>5，涨速>2，沪深主板，非st', loop=True)
+    if df is None:
+        codes = []
+        return codes
     code_array = df['股票代码']
     codes = code_array.values
     return codes
