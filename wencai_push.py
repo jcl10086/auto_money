@@ -38,4 +38,4 @@ if __name__ == '__main__':
             r.expire(code, 300)
             data_util.wx_push(code)
             print(code)
-        time.sleep(1)
+        time.sleep(2)
