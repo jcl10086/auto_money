@@ -35,7 +35,7 @@ if __name__ == '__main__':
             if r.exists(code):
                 continue
             r.set(code, 'sb')
-            r.expire(code, 120)
+            r.expire(code, 300)
             data_util.wx_push(code)
             print(code)
         time.sleep(1)
