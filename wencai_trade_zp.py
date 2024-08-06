@@ -63,10 +63,11 @@ if __name__ == '__main__':
     while True:
         data = get_data(codes)
         if len(data) == 0:
+            print('====执行====')
             continue
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 50000
+        enable_balance = 49800
         buy_info(code, float(price), enable_balance, name)
         time.sleep(1)
