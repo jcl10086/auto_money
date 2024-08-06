@@ -14,7 +14,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅大于-2小于2，流值小于30亿，股价>4,沪深主板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅大于-1.5小于2，流值小于30亿，股价>4,沪深主板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -33,9 +33,9 @@ def get_data(stock_list):
     # 过滤条件：reversed_bytes9
         my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3)]
     # 过滤竞价涨幅
-    my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
-    my_df = my_df[(my_df['jj_zf'] >= -2) & (my_df['jj_zf'] <= 2.5)]
-    my_df = my_df[(my_df['cur_vol'] >= 1000)]
+    # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
+    # my_df = my_df[(my_df['jj_zf'] >= -2) & (my_df['jj_zf'] <= 2.5)]
+    # my_df = my_df[(my_df['cur_vol'] >= 1000)]
     # 按照Score列进行降序排序，并获取Top 1行
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
@@ -67,6 +67,6 @@ if __name__ == '__main__':
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 45000
+        enable_balance = 50000
         buy_info(code, float(price), enable_balance, name)
         time.sleep(1)
