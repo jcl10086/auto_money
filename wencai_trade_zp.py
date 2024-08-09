@@ -1,12 +1,12 @@
-import datetime
 import math
+import schedule
 import time
-from sched import scheduler
+from datetime import datetime, timedelta
 
 from mootdx.quotes import Quotes
 import pandas as pd
 import pywencai
-
+from apscheduler.schedulers.blocking import BlockingScheduler
 import easytrader
 
 # 初始化账号
@@ -71,23 +71,14 @@ def job():
 
 
 if __name__ == '__main__':
-    # 获取当前时间
-    now = datetime.datetime.now()
+    # 创建调度器
+    scheduler = BlockingScheduler()
 
-    # 设置执行时间为今天的 9:26
-    execution_time = now.replace(hour=9, minute=27, second=0, microsecond=0)
+    # 添加任务，指定时间执行
+    scheduler.add_job(job, 'cron', hour=9, minute=27)
 
-    # 如果当前时间已经超过 9:26，设置为明天的 9:26
-    if now >= execution_time:
-        execution_time += datetime.timedelta(days=1)
-
-    # 计算到执行时间的秒数
-    delay_seconds = (execution_time - now).total_seconds()
-
-    # 安排任务在指定时间执行
-    scheduler.enter(delay_seconds, 1, job())
-
-    print(f"Task scheduled to run at: {execution_time}")
-
-    # 启动调度器
-    scheduler.run()
+    try:
+        # 启动调度器
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        pass
