@@ -1,6 +1,8 @@
 import datetime
 import math
 import time
+from sched import scheduler
+
 from mootdx.quotes import Quotes
 import pandas as pd
 import pywencai
@@ -14,7 +16,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅大于-1.5小于2，流值小于30亿，股价>4,沪深主板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅大于等于0小于2.5，流值小于40亿，股价>4,沪深主板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -35,7 +37,7 @@ def get_data(stock_list):
     # 过滤竞价涨幅
     # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
     # my_df = my_df[(my_df['jj_zf'] >= -2) & (my_df['jj_zf'] <= 2.5)]
-    my_df = my_df[(my_df['cur_vol'] >= 1000)]
+    # my_df = my_df[(my_df['cur_vol'] >= 1000)]
     # 按照Score列进行降序排序，并获取Top 1行
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
@@ -53,13 +55,8 @@ def buy_info(code, price, enable_balance, name):
     return gd_num
 
 
-if __name__ == '__main__':
+def job():
     codes = get_codes()
-    # 获取当前时间
-    now = datetime.datetime.now()
-    # 将时间格式化为指定格式
-    formatted_date = now.strftime("%Y%m%d")
-    key = '收盘价:不复权[' + formatted_date + ']'
     while True:
         data = get_data(codes)
         if len(data) == 0:
@@ -68,6 +65,29 @@ if __name__ == '__main__':
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 58900
+        enable_balance = 53000
         buy_info(code, float(price), enable_balance, name)
         time.sleep(1)
+
+
+if __name__ == '__main__':
+    # 获取当前时间
+    now = datetime.datetime.now()
+
+    # 设置执行时间为今天的 9:26
+    execution_time = now.replace(hour=9, minute=27, second=0, microsecond=0)
+
+    # 如果当前时间已经超过 9:26，设置为明天的 9:26
+    if now >= execution_time:
+        execution_time += datetime.timedelta(days=1)
+
+    # 计算到执行时间的秒数
+    delay_seconds = (execution_time - now).total_seconds()
+
+    # 安排任务在指定时间执行
+    scheduler.enter(delay_seconds, 1, job())
+
+    print(f"Task scheduled to run at: {execution_time}")
+
+    # 启动调度器
+    scheduler.run()
