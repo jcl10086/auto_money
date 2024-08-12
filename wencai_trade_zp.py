@@ -33,13 +33,13 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
     # 过滤条件：reversed_bytes9
-        my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3)]
+    # my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3)]
     # 过滤竞价涨幅
     # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
-    # my_df = my_df[(my_df['jj_zf'] >= -2) & (my_df['jj_zf'] <= 2.5)]
-    # my_df = my_df[(my_df['cur_vol'] >= 1000)]
-    # 按照Score列进行降序排序，并获取Top 1行
-    data = my_df.nlargest(1, 'reversed_bytes9')
+    my_df['dr_zf'] = round((my_df['price'] - my_df['open']) / my_df['open'] * 100, 2)
+    my_df = my_df[(my_df['dr_zf'] >= 2.5) & (my_df['dr_zf'] <= 3.5)]
+    # 按照Score列进行降序排序，并获取Top 3行
+    data = my_df.nlargest(1, 'dr_zf')
     return data
 
 
