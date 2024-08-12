@@ -33,7 +33,7 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
     # 过滤条件：reversed_bytes9
-        my_df = my_df[(my_df['reversed_bytes9'] >= 3) & (my_df['reversed_bytes9'] <= 4)]
+        my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['reversed_bytes9'] <= 4)]
     # 过滤竞价涨幅
     # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
     # my_df = my_df[(my_df['jj_zf'] >= -2) & (my_df['jj_zf'] <= 2.5)]
@@ -65,7 +65,7 @@ def job():
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 53000
+        enable_balance = 60000
         buy_info(code, float(price), enable_balance, name)
         time.sleep(1)
 
