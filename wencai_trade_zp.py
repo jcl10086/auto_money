@@ -16,7 +16,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅大于等于0小于2.5，流值小于40亿，股价>4,沪深主板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅大于等于0小于2，流值小于40亿，股价>4,沪深主板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -33,7 +33,7 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
     # 过滤条件：reversed_bytes9
-        my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['reversed_bytes9'] <= 4)]
+        my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3)]
     # 过滤竞价涨幅
     # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
     # my_df = my_df[(my_df['jj_zf'] >= -2) & (my_df['jj_zf'] <= 2.5)]
@@ -71,14 +71,4 @@ def job():
 
 
 if __name__ == '__main__':
-    # 创建调度器
-    scheduler = BlockingScheduler()
-
-    # 添加任务，指定时间执行
-    scheduler.add_job(job, 'cron', hour=9, minute=27)
-
-    try:
-        # 启动调度器
-        scheduler.start()
-    except (KeyboardInterrupt, SystemExit):
-        pass
+    job()
