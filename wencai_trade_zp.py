@@ -1,6 +1,7 @@
 import math
 import time
 
+from apscheduler.schedulers.blocking import BlockingScheduler
 from mootdx.quotes import Quotes
 import pandas as pd
 import pywencai
@@ -68,4 +69,14 @@ def job():
 
 
 if __name__ == '__main__':
-    job()
+    # 创建调度器
+    scheduler = BlockingScheduler()
+
+    # 添加任务，指定时间执行
+    scheduler.add_job(job, 'cron', hour=14, minute=50)
+
+    try:
+        # 启动调度器
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        pass
