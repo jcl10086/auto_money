@@ -1,12 +1,9 @@
 import math
-import schedule
 import time
-from datetime import datetime, timedelta
 
 from mootdx.quotes import Quotes
 import pandas as pd
 import pywencai
-from apscheduler.schedulers.blocking import BlockingScheduler
 import easytrader
 
 # 初始化账号
