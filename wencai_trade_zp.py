@@ -63,9 +63,9 @@ def job():
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 60000
+        enable_balance = 50000
         buy_info(code, float(price), enable_balance, name)
-        time.sleep(1)
+        time.sleep(0.5)
 
 
 if __name__ == '__main__':
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
 
     # 添加任务，指定时间执行
-    scheduler.add_job(job, 'cron', hour=14, minute=50)
+    scheduler.add_job(job, 'cron', hour=9, minute=28)
 
     try:
         # 启动调度器
