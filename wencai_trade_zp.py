@@ -34,10 +34,12 @@ def get_data(stock_list):
     # my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3)]
     # 过滤竞价涨幅
     # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
-    my_df['dr_zf'] = round((my_df['price'] - my_df['open']) / my_df['open'] * 100, 2)
-    my_df = my_df[(my_df['dr_zf'] >= 2.5) & (my_df['dr_zf'] <= 4)]
+    # my_df['dr_zf'] = round((my_df['price'] - my_df['open']) / my_df['open'] * 100, 2)
+    my_df['dq_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
+
+    my_df = my_df[(my_df['dq_zf'] >= 3.5)]
     # 按照Score列进行降序排序，并获取Top 3行
-    data = my_df.nlargest(1, 'dr_zf')
+    data = my_df.nlargest(1, 'dq_zf')
     return data
 
 
@@ -63,7 +65,7 @@ def job():
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 55000
+        enable_balance = 54000
         buy_info(code, float(price), enable_balance, name)
         time.sleep(0.5)
 
