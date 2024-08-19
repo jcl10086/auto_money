@@ -31,15 +31,15 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
     # 过滤条件：reversed_bytes9
-    # my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 3.5)]
     # 过滤竞价涨幅
     # my_df['jj_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
     # my_df['dr_zf'] = round((my_df['price'] - my_df['open']) / my_df['open'] * 100, 2)
-    my_df['dq_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
+    # my_df['dq_zf'] = round((my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100, 2)
 
-    my_df = my_df[(my_df['dq_zf'] >= 3.5)]
+    # my_df = my_df[(my_df['dq_zf'] >= 3.5)]
     # 按照Score列进行降序排序，并获取Top 3行
-    data = my_df.nlargest(1, 'dq_zf')
+    data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
 
@@ -65,7 +65,7 @@ def job():
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 54000
+        enable_balance = 53500
         buy_info(code, float(price), enable_balance, name)
         time.sleep(0.5)
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
 
     # 添加任务，指定时间执行
-    scheduler.add_job(job, 'cron', hour=9, minute=28)
+    scheduler.add_job(job, 'cron', hour=9, minute=29)
 
     try:
         # 启动调度器
