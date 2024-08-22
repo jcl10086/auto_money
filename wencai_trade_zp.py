@@ -14,7 +14,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes():
-    df = pywencai.get(query='当前涨跌幅>=0且<=2，流值小于50亿，股价>2且<18,沪深主板，创业板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>=0且<=2，流值小于50亿，股价>2且<18,沪深主板，创业板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
 
     # 添加任务，指定时间执行
-    scheduler.add_job(job, 'cron', hour=9, minute=31, second=5)
+    scheduler.add_job(job, 'cron', hour=9, minute=28, second=5)
 
     try:
         # 启动调度器
