@@ -14,7 +14,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅>=0且<2，流值小于50亿，股价>2且<18,沪深主板或者创业板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>=0且<=1，流值小于50亿，股价>2且<18,沪深主板或者创业板，非st，昨日非涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -54,7 +54,7 @@ def job():
     while True:
         data = get_data(codes)
         if len(data) == 0:
-            print('====执行====')
+            print('====执行1====')
             continue
         code = data['code']
         price = data['price']
@@ -66,14 +66,3 @@ def job():
 
 if __name__ == '__main__':
     job()
-    # # 创建调度器
-    # scheduler = BlockingScheduler()
-    #
-    # # 添加任务，指定时间执行
-    # scheduler.add_job(job, 'cron', hour=9, minute=28, second=5)
-    #
-    # try:
-    #     # 启动调度器
-    #     scheduler.start()
-    # except (KeyboardInterrupt, SystemExit):
-    #     pass
