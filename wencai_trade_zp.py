@@ -33,7 +33,10 @@ def get_data(stock_list):
     # 过滤条件：reversed_bytes9
     my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 4)]
     # 按照Score列进行降序排序，并获取Top 3行
-    data = my_df.nlargest(1, 'reversed_bytes9')
+    my_df = my_df.sort_values(by='code', key=lambda x: x.apply(
+        lambda y: (0 if y.startswith('00') else 1 if y.startswith('60') else 2 if y.startswith('30') else 3)))
+
+    data = my_df.head(1)
     return data
 
 
