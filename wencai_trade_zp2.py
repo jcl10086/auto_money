@@ -58,7 +58,7 @@ def job():
         code = data['code']
         price = data['price']
         name = ''
-        enable_balance = 51300
+        enable_balance = 57800
         buy_info(code, float(price), enable_balance, name)
         time.sleep(0.5)
 
