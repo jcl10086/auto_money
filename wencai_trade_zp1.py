@@ -31,7 +31,7 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 2.5) & (my_df['reversed_bytes9'] <= 4)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 3) & (my_df['reversed_bytes9'] <= 5)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
