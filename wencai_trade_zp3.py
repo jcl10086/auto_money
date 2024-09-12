@@ -14,7 +14,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅>-2且<=3，流值小于50亿，创业板，前5日涨跌幅>7的次数=0', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>=0且<=3，流值小于50亿，创业板，前5日涨跌幅>7的次数=0', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -31,7 +31,7 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['reversed_bytes9'] <= 5)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['reversed_bytes9'] <= 6)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
