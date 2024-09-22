@@ -1,4 +1,5 @@
 import math
+import sys
 import time
 from datetime import datetime
 
@@ -7,6 +8,7 @@ from mootdx.quotes import Quotes
 import pandas as pd
 import pywencai
 import easytrader
+import subprocess
 
 # 初始化账号
 user = easytrader.use('eastmoney')
@@ -108,4 +110,4 @@ def job3():
 
 
 if __name__ == '__main__':
-    job1()
+    print()
