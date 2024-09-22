@@ -17,19 +17,31 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes1():
-    df = pywencai.get(query='开盘涨跌幅>-1且<=0，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>-1且<0，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes2():
-    df = pywencai.get(query='开盘涨跌幅>0且<1，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>0且<=0.3，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes3():
     df = pywencai.get(query='开盘涨跌幅>=1且<2，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    codes = df['code'].values.tolist()
+    return codes
+
+
+def get_codes4():
+    df = pywencai.get(query='开盘涨跌幅=0，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    codes = df['code'].values.tolist()
+    return codes
+
+
+def get_codes5():
+    df = pywencai.get(query='开盘涨跌幅>0.3且<1，流值小于50亿，股价>2且<18,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -107,6 +119,14 @@ def job2():
 
 def job3():
     execute_job(get_codes3, "Job 3")
+
+
+def job4():
+    execute_job(get_codes4, "Job 4")
+
+
+def job5():
+    execute_job(get_codes5, "Job 5")
 
 
 if __name__ == '__main__':
