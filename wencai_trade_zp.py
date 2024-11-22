@@ -17,7 +17,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes1():
-    df = pywencai.get(query='11月14日涨停，11月15日未涨停，沪深主板，非st', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='前日首板，昨日未涨停，非st，沪深主板，开盘涨跌幅>-2且<2.5', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
