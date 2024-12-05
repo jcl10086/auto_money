@@ -23,7 +23,7 @@ def get_codes1():
 
 
 def get_codes2():
-    df = pywencai.get(query='11月13日涨停，11月14日未涨停，11月15日未涨停，沪深主板，非st', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='前日首板，昨日未涨停，非st，沪深主板', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
