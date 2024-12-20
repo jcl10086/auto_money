@@ -23,13 +23,13 @@ def get_codes1():
 
 
 def get_codes2():
-    df = pywencai.get(query='前日首板，昨日未涨停，非st，沪深主板', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>=0且<5，创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes3():
-    df = pywencai.get(query='11月12日涨停，11月13日未涨停，11月14日未涨停，11月15日未涨停，沪深主板，非st', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨跌幅>-2且<0，创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -61,7 +61,7 @@ def get_data(stock_list):
     # my_df['max_zf'] = (my_df['high'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['min_zf'] = (my_df['low'] - my_df['last_close']) / my_df['last_close'] * 100
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 2.2) & (my_df['vol'] > 2000)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 3) & (my_df['vol'] > 2000)]
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
