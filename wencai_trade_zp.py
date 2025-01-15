@@ -17,19 +17,19 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes1():
-    df = pywencai.get(query='昨日未涨停，开盘涨幅>0且<2，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，开盘涨跌幅>0且<=2，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes2():
-    df = pywencai.get(query='开盘涨跌幅>=0且<5，创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，开盘涨跌幅=0，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes3():
-    df = pywencai.get(query='开盘涨跌幅>-2，创业板，昨日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，开盘涨幅>-1.5且<0，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -83,7 +83,7 @@ def buy(data):
     code = data['code']
     price = data['price']
     name = ''
-    enable_balance = 114000
+    enable_balance = 132300
     buy_info(code, float(price), enable_balance, name)
 
 
