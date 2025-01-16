@@ -23,19 +23,19 @@ def get_codes1():
 
 
 def get_codes2():
-    df = pywencai.get(query='昨日未涨停，前日未涨停，开盘涨跌幅>0且<1，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，前日未涨停，开盘涨跌幅>0且<0.5，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes3():
-    df = pywencai.get(query='昨日未涨停，前日未涨停，开盘涨跌幅>-2且<0，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，前日未涨停，开盘涨跌幅>0.5且<1，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_codes4():
-    df = pywencai.get(query='开盘涨跌幅=0，流值小于50亿，股价>1且<12,沪深主板，非st，昨日未涨停且前日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，前日未涨停，开盘涨跌幅>-2且<0，沪深主板，非st，流值<100亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
