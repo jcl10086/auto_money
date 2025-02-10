@@ -37,7 +37,7 @@ if __name__ == '__main__':
     gd_price = 16.8
     enable_amount = 3000
     # 封单阀值
-    fd_num = 70000
+    fd_num = 50000
     while True:
         fd = get_info(stock_list)
         if fd < fd_num:
