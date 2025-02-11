@@ -29,12 +29,14 @@ def get_data(stock_list):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
 
+    # 反弹涨幅
+    my_df['ftzf'] = (my_df['price'] - my_df['low']) / my_df['last_close'] * 100
     # 涨幅
-    my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
+    # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['max_zf'] = (my_df['high'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['min_zf'] = (my_df['low'] - my_df['last_close']) / my_df['last_close'] * 100
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['zf'] >= 9)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['ftzf'] >= 3)]
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
