@@ -31,17 +31,20 @@ def get_data(stock_list):
 
     # 反弹涨幅
     my_df['ftzf'] = (my_df['price'] - my_df['low']) / my_df['last_close'] * 100
+    # 跳水涨幅
+    my_df['tszf'] = (my_df['high'] - my_df['low']) / my_df['low'] * 100
     # 涨幅
-    my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
+    # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['max_zf'] = (my_df['high'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['min_zf'] = (my_df['low'] - my_df['last_close']) / my_df['last_close'] * 100
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 3) & (my_df['zf'] >= 8) & (my_df['zf'] < 9.7)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['tszf'] >= 6) & (my_df['ftzf'] >= 2)]
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
 
+# 获取持仓
 def buy(data):
     code = data['code']
     # 涨停买入
@@ -55,12 +58,23 @@ def buy_info_zt(code, price, enable_balance):
     gd_price = price
     # 挂单数量
     gd_num = math.floor(enable_balance / gd_price / 100) * 100
-    print(f'挂单价格：{gd_price}  挂单数量：{gd_num}')
+    print(f'{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
     # 买入
     user.buy(code, price=gd_price, amount=gd_num)
     return gd_num
 
 
+def position_info():
+    positions = user.position
+    # positions_new = []
+    # for position in positions:
+    #     if position.enable_amount > 0:
+    #         positions_new.append(position)
+    #         break
+    return positions
+
+
+# 获取持仓
 def job():
     codes = get_codes()
     while True:
@@ -69,8 +83,19 @@ def job():
             print('====无数据====')
             time.sleep(0.5)
             continue
+        code = data['code'].values[0]
+        positions = position_info()
+        buy_flag = False
+        for position in positions:
+            if code == position.stock_code:
+                buy_flag = True
+                continue
+        if buy_flag is True:
+            print(f'{code}====已买入====')
+            time.sleep(0.5)
+            continue
         buy(data)
-        break
+        time.sleep(5)
 
 
 if __name__ == '__main__':
