@@ -17,7 +17,7 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='涨幅>7，股价>2，昨日未涨停，沪深主板非st，今日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日开盘涨幅>0.2，沪深主板非st，流值<100亿，股价>2', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -29,10 +29,10 @@ def get_data(stock_list):
     for i in range(0, len(stock_list), batch_size):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
-    my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['zf'] >= 9)]
     # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    # my_df = my_df[(my_df['zf'] >= 9.9)]
+    # my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['zf'] >= 9)]
+    # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
+    my_df = my_df[(my_df['bid_vol1'] < 50000) & (my_df['ask_vol1'] == 0)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -41,9 +41,21 @@ def get_data(stock_list):
 def buy(data):
     code = data['code']
     # 涨停买入
-    price = data['high']
-    enable_balance = 70000
+    price = data['bid1']
+    enable_balance = 100000
     buy_info(code, float(price), enable_balance)
+
+
+def buy_info(code, price, enable_balance):
+    # 挂单股价
+    gd_price = price
+    # gd_price = round(gd_price, 2)
+    # 挂单数量
+    gd_num = math.floor(enable_balance / gd_price / 100) * 100
+    print(f'代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
+    # 买入
+    user.buy(code, price=gd_price, amount=gd_num)
+    return gd_num
 
 
 def position_info():
@@ -54,12 +66,7 @@ def position_info():
 # 获取持仓
 def job():
     codes = get_codes()
-    i = 0
     while True:
-        if i >= 30:
-            break
-        i = i + 1
-        print(f'=====================执行第{str(i)}次')
         data = get_data(codes)
         if len(data) == 0:
             print('====无数据====')
@@ -81,5 +88,4 @@ def job():
 
 
 if __name__ == '__main__':
-    while True:
-        job()
+    job()
