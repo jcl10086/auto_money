@@ -42,7 +42,7 @@ def get_data(stock_list):
     # my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['price'] == my_df['high']) & (my_df['bid_vol1'] < 30000)]
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     # my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['zf'] >= 9)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['zf'] >= 9.5)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
