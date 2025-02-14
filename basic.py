@@ -25,7 +25,7 @@ user.prepare('account.json')
 
 def buy_info(code, price, enable_balance):
     # 挂单股价
-    gd_price = price * 1.001
+    gd_price = price * 1.002
     gd_price = round(gd_price, 2)
     # 挂单数量
     gd_num = math.floor(enable_balance / gd_price / 100) * 100

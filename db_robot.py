@@ -31,8 +31,8 @@ def get_data(stock_list):
         my_df = pd.concat([my_df, df], ignore_index=True)
     # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['zf'] >= 9)]
-    # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    my_df = my_df[(my_df['bid_vol1'] < 50000) & (my_df['ask_vol1'] == 0)]
+    my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
+    my_df = my_df[(my_df['reversed_bytes9'] > 5)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -41,21 +41,21 @@ def get_data(stock_list):
 def buy(data):
     code = data['code']
     # 涨停买入
-    price = data['bid1']
-    enable_balance = 100000
+    price = data['price']
+    enable_balance = 120000
     buy_info(code, float(price), enable_balance)
 
 
-def buy_info(code, price, enable_balance):
-    # 挂单股价
-    gd_price = price
-    # gd_price = round(gd_price, 2)
-    # 挂单数量
-    gd_num = math.floor(enable_balance / gd_price / 100) * 100
-    print(f'代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
-    # 买入
-    user.buy(code, price=gd_price, amount=gd_num)
-    return gd_num
+# def buy_info(code, price, enable_balance):
+#     # 挂单股价
+#     gd_price = price
+#     # gd_price = round(gd_price, 2)
+#     # 挂单数量
+#     gd_num = math.floor(enable_balance / gd_price / 100) * 100
+#     print(f'代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
+#     # 买入
+#     user.buy(code, price=gd_price, amount=gd_num)
+#     return gd_num
 
 
 def position_info():
