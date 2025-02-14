@@ -29,7 +29,7 @@ def buy_info(code, price, enable_balance):
     gd_price = round(gd_price, 2)
     # 挂单数量
     gd_num = math.floor(enable_balance / gd_price / 100) * 100
-    print(f'挂单价格：{gd_price}  挂单数量：{gd_num}')
+    print(f'{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
     # 买入
     user.buy(code, price=gd_price, amount=gd_num)
     return gd_num

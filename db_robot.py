@@ -31,8 +31,9 @@ def get_data(stock_list):
         my_df = pd.concat([my_df, df], ignore_index=True)
     # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['zf'] >= 9)]
+    my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    my_df = my_df[(my_df['reversed_bytes9'] > 5)]
+    my_df = my_df[(my_df['reversed_bytes9'] > 4) & (my_df['zf'] > 8)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
