@@ -17,7 +17,7 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='昨日未涨停，曾涨停，沪深主板非st', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，曾今日涨停，沪深主板非st', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -56,7 +56,9 @@ def buy_info(code, price, enable_balance):
     # gd_price = round(gd_price, 2)
     # 挂单数量
     gd_num = math.floor(enable_balance / gd_price / 100) * 100
-    print(f'代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
+    current_time = datetime.now()
+    formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    print(f'当前时间：{formatted_time}  代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
     # 买入
     user.buy(code, price=gd_price, amount=gd_num)
     return gd_num
