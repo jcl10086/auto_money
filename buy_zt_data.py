@@ -34,14 +34,14 @@ def get_data(stock_list):
     # 跳水涨幅
     # my_df['tszf'] = (my_df['high'] - my_df['low']) / my_df['low'] * 100
     # 涨幅
-    # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
+    my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['max_zf'] = (my_df['high'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['min_zf'] = (my_df['low'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df = my_df[(my_df['tszf'] <= 5)]
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['price'] == my_df['zt_price']) & (my_df['bid_vol1'] < 70000)]
-    # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
+    # my_df = my_df[(my_df['price'] == my_df['zt_price']) & (my_df['bid_vol1'] < 70000)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['zf'] >= 9)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
