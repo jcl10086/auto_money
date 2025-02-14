@@ -43,9 +43,9 @@ def get_data(stock_list):
 
 # 获取持仓
 def buy(data):
-    code = data['zt_price']
+    code = data['code']
     # 涨停买入
-    price = data['price']
+    price = data['zt_price']
     enable_balance = 120000
     buy_info(code, float(price), enable_balance)
 
