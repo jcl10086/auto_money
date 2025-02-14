@@ -31,32 +31,35 @@ def get_data(stock_list):
         my_df = pd.concat([my_df, df], ignore_index=True)
     # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df = my_df[(my_df['reversed_bytes9'] >= 4) & (my_df['zf'] >= 9)]
+    # my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
+    # my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
+    # my_df = my_df[(my_df['reversed_bytes9'] > 2) & (my_df['zf'] > 8)]
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    my_df = my_df[(my_df['reversed_bytes9'] > 2) & (my_df['zf'] > 8)]
+    # 过滤条件：reversed_bytes9
+    my_df = my_df[(my_df['price'] == my_df['zt_price']) & (my_df['bid_vol1'] < 70000)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
 
 # 获取持仓
 def buy(data):
-    code = data['code']
+    code = data['zt_price']
     # 涨停买入
     price = data['price']
     enable_balance = 120000
     buy_info(code, float(price), enable_balance)
 
 
-# def buy_info(code, price, enable_balance):
-#     # 挂单股价
-#     gd_price = price
-#     # gd_price = round(gd_price, 2)
-#     # 挂单数量
-#     gd_num = math.floor(enable_balance / gd_price / 100) * 100
-#     print(f'代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
-#     # 买入
-#     user.buy(code, price=gd_price, amount=gd_num)
-#     return gd_num
+def buy_info(code, price, enable_balance):
+    # 挂单股价
+    gd_price = price
+    # gd_price = round(gd_price, 2)
+    # 挂单数量
+    gd_num = math.floor(enable_balance / gd_price / 100) * 100
+    print(f'代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
+    # 买入
+    user.buy(code, price=gd_price, amount=gd_num)
+    return gd_num
 
 
 def position_info():
