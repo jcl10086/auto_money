@@ -1,3 +1,4 @@
+# 高开买入
 import math
 import time
 from datetime import datetime
@@ -16,32 +17,22 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨幅>2，沪深主板非st，开盘卖一>0', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨幅>6，沪深主板非st，开盘卖一>0，昨日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
 
 def get_data(stock_list):
-    # stock_list = stock_list[0:1]
     my_df = None
     batch_size = 50
     for i in range(0, len(stock_list), batch_size):
         df = tdx_client.quotes(symbol=stock_list[i:i + batch_size])
         my_df = pd.concat([my_df, df], ignore_index=True)
 
-    # 反弹涨幅
-    # my_df['ftzf'] = (my_df['price'] - my_df['low']) / my_df['last_close'] * 100
-    # 跳水涨幅
-    # my_df['tszf'] = (my_df['high'] - my_df['low']) / my_df['low'] * 100
     # 涨幅
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    # my_df['max_zf'] = (my_df['high'] - my_df['last_close']) / my_df['last_close'] * 100
-    # my_df['min_zf'] = (my_df['low'] - my_df['last_close']) / my_df['last_close'] * 100
-    # my_df = my_df[(my_df['tszf'] <= 5)]
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    # 过滤条件：reversed_bytes9
-    # my_df = my_df[(my_df['price'] == my_df['zt_price']) & (my_df['bid_vol1'] < 70000)]
-    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['zf'] >= 9.5)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['zf'] >= 9)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -51,7 +42,7 @@ def buy(data):
     code = data['code'].values[0]
     # 涨停买入
     price = data['zt_price']
-    enable_balance = 120000
+    enable_balance = 100000
     buy_info_zt(code, float(price), enable_balance)
 
 
@@ -97,7 +88,7 @@ def job():
             time.sleep(0.5)
             continue
         buy(data)
-        time.sleep(5)
+        break
 
 
 if __name__ == '__main__':
