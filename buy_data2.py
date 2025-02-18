@@ -75,17 +75,17 @@ def job():
             print('====无数据====')
             time.sleep(0.5)
             continue
-        code = data['code'].values[0]
-        positions = position_info()
-        buy_flag = False
-        for position in positions:
-            if code == position.stock_code:
-                buy_flag = True
-                continue
-        if buy_flag is True:
-            print(f'{code}====已买入====')
-            time.sleep(0.5)
-            continue
+        # code = data['code'].values[0]
+        # positions = position_info()
+        # buy_flag = False
+        # for position in positions:
+        #     if code == position.stock_code:
+        #         buy_flag = True
+        #         continue
+        # if buy_flag is True:
+        #     print(f'{code}====已买入====')
+        #     time.sleep(0.5)
+        #     continue
         buy(data)
         break
 
