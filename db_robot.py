@@ -17,7 +17,7 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='涨幅>3，沪深主板非st，股价>2，流值<100亿，卖一>0', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='涨幅>1，沪深主板非st，股价>2，流值<100亿，卖一>0，昨日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
