@@ -17,7 +17,7 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨幅>8，沪深主板非st，昨日连板次数<3', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='开盘涨幅>5，沪深主板非st，昨日未涨停', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -32,7 +32,7 @@ def get_data(stock_list):
     # 涨幅
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['zf'] >= 9)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['zf'] >= 9.5)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
