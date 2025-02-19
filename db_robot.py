@@ -17,7 +17,7 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='涨幅>3，沪深主板非st，股价>2，流值<100亿', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='涨幅>3，沪深主板非st，股价>2，流值<100亿，卖一>0', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -86,19 +86,8 @@ def job():
             print('====无数据====')
             time.sleep(0.5)
             continue
-        code = data['code'].values[0]
-        positions = position_info()
-        buy_flag = False
-        for position in positions:
-            if code == position.stock_code:
-                buy_flag = True
-                continue
-        if buy_flag is True:
-            print(f'{code}====已买入====')
-            time.sleep(0.5)
-            continue
         buy(data)
-        time.sleep(5)
+        break
 
 
 if __name__ == '__main__':
