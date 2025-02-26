@@ -41,7 +41,7 @@ def buy(data):
     code = data['code'].values[0]
     # 涨停买入
     price = data['high']
-    enable_balance = 100000
+    enable_balance = 196000
     buy_info_zt(code, float(price), enable_balance)
 
 
@@ -50,7 +50,9 @@ def buy_info_zt(code, price, enable_balance):
     gd_price = price
     # 挂单数量
     gd_num = math.floor(enable_balance / gd_price / 100) * 100
-    print(f'{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
+    current_time = datetime.now()
+    formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    print(f'当前时间：{formatted_time}  代码：{code}  挂单价格：{gd_price}  挂单数量：{gd_num}')
     # 买入
     user.buy(code, price=gd_price, amount=gd_num)
     return gd_num
