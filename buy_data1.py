@@ -32,7 +32,7 @@ def get_data(stock_list):
     # 涨幅
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['price'] == my_df['zt_price']) & (my_df['ask_vol1'] < 3000)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['price'] == my_df['zt_price']) & (my_df['ask_vol1'] < 8000)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -42,7 +42,7 @@ def buy(data):
     code = data['code'].values[0]
     # 涨停买入
     price = data['zt_price']
-    enable_balance = 196000
+    enable_balance = 180000
     buy_info_zt(code, float(price), enable_balance)
 
 
