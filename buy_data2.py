@@ -41,7 +41,7 @@ def buy(data):
     code = data['code'].values[0]
     # 涨停买入
     price = data['high']
-    enable_balance = 196000
+    enable_balance = 75000
     buy_info_zt(code, float(price), enable_balance)
 
 
