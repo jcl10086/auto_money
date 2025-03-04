@@ -33,11 +33,11 @@ def sell(code, gd_price, enable_amount):
 
 
 if __name__ == '__main__':
-    stock_list = ['002861']
-    gd_price = 16.8
-    enable_amount = 3000
+    stock_list = ['600619']
+    gd_price = 13.35
+    enable_amount = 4100
     # 封单阀值
-    fd_num = 50000
+    fd_num = 20000
     while True:
         fd = get_info(stock_list)
         if fd < fd_num:
