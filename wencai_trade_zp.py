@@ -83,7 +83,7 @@ def buy_info(code, price, enable_balance, name, zt_price):
 
 
 def buy(data):
-    zt_price = data['zt_price']
+    zt_price = data['zt_price'].values[0]
     code = data['code']
     price = data['price']
     name = ''
