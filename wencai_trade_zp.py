@@ -17,7 +17,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes1():
-    df = pywencai.get(query='昨日未涨停，开盘涨跌幅>1且<3，沪深主板,非st，流值<80亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='昨日未涨停，开盘涨跌幅>1且<8，9点25价格>9点24价格，沪深主板,非st，流值<80亿，股价<20', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -60,17 +60,20 @@ def get_data(stock_list):
 
     # my_df['max_zf'] = (my_df['high'] - my_df['last_close']) / my_df['last_close'] * 100
     # my_df['min_zf'] = (my_df['low'] - my_df['last_close']) / my_df['last_close'] * 100
+    my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] > 2.5)]
+    my_df = my_df[(my_df['reversed_bytes9'] > 1.5)]
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
 
-def buy_info(code, price, enable_balance, name):
+def buy_info(code, price, enable_balance, name, zt_price):
     # 挂单股价
     gd_price = price * 1.01
     gd_price = round(gd_price, 2)
+    if gd_price >= zt_price:
+        gd_price = zt_price
     # 挂单数量
     gd_num = math.floor(enable_balance / gd_price / 100) * 100
     print(f'挂单价格：{gd_price}  挂单数量：{gd_num} {name} {code}')
@@ -80,11 +83,12 @@ def buy_info(code, price, enable_balance, name):
 
 
 def buy(data):
+    zt_price = data['zt_price']
     code = data['code']
     price = data['price']
     name = ''
     enable_balance = 152000
-    buy_info(code, float(price), enable_balance, name)
+    buy_info(code, float(price), enable_balance, name, zt_price)
 
 
 # 通用的执行函数
