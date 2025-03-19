@@ -16,7 +16,7 @@ user.prepare('account.json')
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨幅>8，沪深主板非st，昨日连板次数<3', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='9点20涨停，开盘涨幅>2且<8，沪深主板，非st，昨日未涨停，股价>2', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -31,7 +31,8 @@ def get_data(stock_list):
     # 涨幅
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['price'] == my_df['zt_price']) & (my_df['ask_vol1'] < 5000)]
+    # my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['price'] == my_df['zt_price']) & (my_df['ask_vol1'] < 5000)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['price'] > 9.8)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -40,8 +41,8 @@ def get_data(stock_list):
 def buy(data):
     code = data['code'].values[0]
     # 涨停买入
-    price = data['high']
-    enable_balance = 75000
+    price = data['zt_price']
+    enable_balance = 100000
     buy_info_zt(code, float(price), enable_balance)
 
 
