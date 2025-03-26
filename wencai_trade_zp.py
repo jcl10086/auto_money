@@ -87,7 +87,7 @@ def buy(data):
     code = data['code']
     price = data['price']
     name = ''
-    enable_balance = 152000
+    enable_balance = 190000
     buy_info(code, float(price), enable_balance, name, zt_price)
 
 
