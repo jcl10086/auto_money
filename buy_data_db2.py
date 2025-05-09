@@ -1,4 +1,3 @@
-# 高开买入
 import math
 import time
 from datetime import datetime
@@ -14,10 +13,10 @@ tdx_client = Quotes.factory(market='std')
 # 初始化账号
 user = easytrader.use('eastmoney')
 user.prepare('account.json')
-cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_random_userid=h7x5hms3yy; u_ukey=A10702B8689642C6BE607730E11E6E4A; u_uver=1.0.0; u_dpass=umhwFo6FJF%2FqZxPCdx%2BQaGVVO4BxcIgFcA4HC96P2H%2F18m26lRsmsSJuBvQEJCdBHi80LrSsTFH9a%2B6rtRvqGg%3D%3D; u_did=7367FAF6251D45A88CB536A1C4018DCA; u_ttype=WEB; user_status=0; user=MDptb181NzA4OTQ0MTQ6Ok5vbmU6NTAwOjU4MDg5NDQxNDo1LDEsNDA7NiwxLDQwOzcsMTExMTExMTExMTEwLDQwOzgsMTExMTAxMTEwMDAwMTExMTEwMDEwMDEwMDEwMDAwMDAsNDA7MzMsMDAwMTAwMDAwMDAwLDEyODszNiwxMDAxMTExMTAwMDAxMTAwMTAxMTExMTEsMTI4OzQ2LDAwMDAxMTExMTAwMDAwMTExMTExMTExMSwxMjg7NTEsMTEwMDAwMDAwMDAwMDAwMCwxMjg7NTgsMDAwMDAwMDAwMDAwMDAwMDEsMTI4Ozc4LDEsMTI4Ozg3LDAwMDAwMDAwMDAwMDAwMDAwMDAxMDAwMCwxMjg7MTAzLDAwMDAwMDEwMDAwMDAwMDAsMTI4OzExNSwwMDAwMDAwMDAwMDAwMDEwMDAwMDAwMDAwMDAwMDAwMCwxMjg7MTE5LDAwMDAwMDAwMDAwMDAwMDAwMDEwMTAwMDAwMDAwMCwxMjg7MTI1LDExLDEyODs0NCwxMSw0MDsxLDEwMSw0MDsyLDEsNDA7MywxLDQwOzEwMiwxLDQwOjI0Ojo6NTcwODk0NDE0OjE3NDY1OTMxMjM6OjoxNjE1MDExMjQwOjI2Nzg0MDA6MDoxYzU4MWM0Njk4Njg0MmQwNTAwYTE2MzEyYzZiNDUyMjQ6ZGVmYXVsdF80OjE%3D; userid=570894414; u_name=mo_570894414; escapename=mo_570894414; ticket=a4f1039da2680a51c6355cc9d440a424; utk=43f2e2dbf1646ceff09a37a3fb4556c9; v=A69j3La3GzxpMB8AVAkjzpsoPsi7VAMvnagHacE9S54lEMG2ySSTxq14l6DS'
+
 
 def get_codes():
-    df = pywencai.get(query='开盘涨幅>2且<8，沪深主板，非st，昨日未涨停，股价>3', loop=True, sort_order='desc', sort_key='最新涨跌幅', cookie=cookie)
+    df = pywencai.get(query='昨日未涨停，沪深主板,非st，股价>3且<30', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -32,8 +31,8 @@ def get_data(stock_list):
     # 涨幅
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
-    # my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['price'] == my_df['zt_price']) & (my_df['ask_vol1'] < 5000)]
-    my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['zf'] > 9)]
+    # my_df = my_df[(my_df['reversed_bytes9'] >= 1) & (my_df['price'] == my_df['zt_price']) & (my_df['ask_vol1'] < 5000)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 2) & (my_df['zf'] > 9.5)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -43,7 +42,7 @@ def buy(data):
     code = data['code'].values[0]
     # 涨停买入
     price = data['zt_price']
-    enable_balance = 80000
+    enable_balance = 100000
     buy_info_zt(code, float(price), enable_balance)
 
 
