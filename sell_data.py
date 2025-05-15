@@ -33,7 +33,7 @@ def sell(code, gd_price, enable_amount):
 
 
 if __name__ == '__main__':
-    stock_list = ['600619']
+    stock_list = ['603109']
     gd_price = 13.35
     enable_amount = 4100
     # 封单阀值
