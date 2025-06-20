@@ -38,7 +38,7 @@ def get_data(stock_list):
     my_df['om_zf'] = (my_df['open'] - my_df['low']) / my_df['low'] * 100
     my_df['pm_zf'] = (my_df['price'] - my_df['low']) / my_df['low'] * 100
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['om_zf'] > 2) & (my_df['pm_zf'] > 2) & (my_df['zf'] < 2) & (my_df['zf'] > -3)]
+    my_df = my_df[(my_df['om_zf'] > 2) & (my_df['pm_zf'] > 2) & (my_df['zf'] < 2) & (my_df['zf'] > -4)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
@@ -61,7 +61,7 @@ def buy(data):
     code = data['code']
     price = data['price']
     name = ''
-    enable_balance = 0
+    enable_balance = 55000
     buy_info(code, float(price), enable_balance, name)
 
 
