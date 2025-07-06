@@ -17,7 +17,7 @@ tdx_client = Quotes.factory(market='std')
 
 
 def get_codes1():
-    df = pywencai.get(query='昨日涨跌幅<-3，沪深主板非st，开盘涨跌幅>-4且<3', loop=True, sort_order='desc', sort_key='最新涨跌幅')
+    df = pywencai.get(query='7月3日未涨停，开盘涨幅>5且<9，沪深主板非st，股价>3', loop=True, sort_order='desc', sort_key='最新涨跌幅')
     codes = df['code'].values.tolist()
     return codes
 
@@ -35,19 +35,21 @@ def get_data(stock_list):
         my_df = pd.concat([my_df, df], ignore_index=True)
 
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
-    my_df['om_zf'] = (my_df['open'] - my_df['low']) / my_df['low'] * 100
-    my_df['pm_zf'] = (my_df['price'] - my_df['low']) / my_df['low'] * 100
+    # my_df['om_zf'] = (my_df['open'] - my_df['low']) / my_df['low'] * 100
+    # my_df['pm_zf'] = (my_df['price'] - my_df['low']) / my_df['low'] * 100
+    my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 2)]
+    my_df = my_df[(my_df['reversed_bytes9'] >= 0) & (my_df['zf'] >= 9.5)]
     # my_df = my_df[(my_df['om_zf'] > 2) & (my_df['pm_zf'] > 2) & (my_df['zf'] < 2) & (my_df['zf'] > -4)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
 
 
-def buy_info(code, price, enable_balance, name):
+def buy_info(code, price, enable_balance, name, zt_price):
     # 挂单股价
-    gd_price = price * 1.008
-    gd_price = round(gd_price, 2)
+    # gd_price = price * 1.01
+    # gd_price = round(gd_price, 2)
+    gd_price = zt_price
     # if gd_price >= zt_price:
     #     gd_price = zt_price
     # 挂单数量
@@ -61,9 +63,10 @@ def buy_info(code, price, enable_balance, name):
 def buy(data):
     code = data['code']
     price = data['price']
+    zt_price = data['zt_price'][0]
     name = ''
-    enable_balance = 55000
-    buy_info(code, float(price), enable_balance, name)
+    enable_balance = 50000
+    buy_info(code, float(price), enable_balance, name, zt_price)
 
 
 # 通用的执行函数
