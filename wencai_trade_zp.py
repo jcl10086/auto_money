@@ -61,12 +61,13 @@ def buy_info(code, price, enable_balance, name, zt_price):
 
 
 def buy(data):
+    # data = data.index
     code = data['code']
     price = data['price']
-    zt_price = data['zt_price'][0]
+    zt_price = data['zt_price']
     name = ''
     enable_balance = 50000
-    buy_info(code, float(price), enable_balance, name, zt_price)
+    buy_info(code, float(price), enable_balance, name, float(zt_price))
 
 
 # 通用的执行函数
