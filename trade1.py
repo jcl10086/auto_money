@@ -43,7 +43,7 @@ def get_data(stock_list):
     my_df['ol_zf'] = (my_df['open'] - my_df['low']) / my_df['low'] * 100
     # 当前价 - 最低价
     my_df['pl_zf'] = (my_df['price'] - my_df['low']) / my_df['low'] * 100
-    # my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
+    my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # 过滤条件：reversed_bytes9
     my_df = my_df[(my_df['pl_last_zf'] <= -1) & (my_df['ll_zf'] <= -5) & (my_df['ol_zf'] >= 2) & (my_df['pl_zf'] >= 3) & (my_df['reversed_bytes9'] >= 0.5)]
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]

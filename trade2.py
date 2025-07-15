@@ -37,6 +37,7 @@ def get_data(stock_list):
 
     # 过滤条件：reversed_bytes9
     my_df = my_df[(my_df['reversed_bytes9'] >= 1)]
+    my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     data = my_df.nlargest(1, 'reversed_bytes9')
     return data
