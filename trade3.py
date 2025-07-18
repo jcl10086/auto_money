@@ -102,3 +102,4 @@ if __name__ == '__main__':
             continue
         # 执行买入操作
         buy(data)
+        break
