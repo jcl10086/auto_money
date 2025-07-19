@@ -18,8 +18,15 @@ cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_rand
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅>6且<9.5，前日未涨停，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='开盘涨跌幅>6，开盘未涨停，7月16日未涨停，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
+
+    # 移除数组
+    # codes_remove = ['002238']
+    # codes = [x for x in codes if x not in codes_remove]
+
+    # 指定股票
+    # codes = ['000514']
     return codes
 
 
