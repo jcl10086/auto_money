@@ -18,7 +18,7 @@ cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_rand
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅>6，开盘未涨停，7月16日未涨停，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='开盘涨跌幅>6，开盘未涨停，昨日非连板，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -45,7 +45,7 @@ def get_data(stock_list):
     # 涨幅
     my_df['zf'] = (my_df['price'] - my_df['last_close']) / my_df['last_close'] * 100
     # 过滤条件：reversed_bytes9
-    my_df = my_df[(my_df['reversed_bytes9'] >= 0.1) & (my_df['zf'] >= 9.8)]
+    my_df = my_df[(my_df['reversed_bytes9'] > 0) & (my_df['zf'] >= 9.8)]
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
     data = my_df.nlargest(1, 'reversed_bytes9')
@@ -73,7 +73,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 30000
+    enable_balance = 27000
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
