@@ -18,7 +18,7 @@ cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_rand
 
 
 def get_codes():
-    df = pywencai.get(query='开盘涨跌幅>6，开盘未涨停，昨日首板，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='开盘涨跌幅>6，开盘未涨停，昨日未涨停，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
