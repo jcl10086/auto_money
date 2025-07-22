@@ -48,7 +48,7 @@ def get_data(stock_list):
     my_df = my_df[(my_df['reversed_bytes9'] > 0) & (my_df['zf'] >= 9.8)]
     my_df['zt_price'] = round(my_df['last_close'] * 1.1, 2)
     # my_df = my_df[(my_df['min_zf'] >= -2) & (my_df['max_zf'] <= 7)]
-    data = my_df.nlargest(1, 'zf')
+    data = my_df.nsmallest(1, 'price')
     return data
 
 
