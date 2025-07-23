@@ -33,11 +33,11 @@ def sell(code, gd_price, enable_amount):
 
 
 if __name__ == '__main__':
-    stock_list = ['003002']
-    gd_price = 34.2
-    enable_amount = 800
+    stock_list = ['002266']
+    gd_price = 4.42
+    enable_amount = 7300
     # 封单阀值
-    fd_num = 5000
+    fd_num = 120000
     while True:
         # 获取当前时间
         now = datetime.now().time()
