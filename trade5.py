@@ -1,3 +1,7 @@
+#!python3
+# -*- coding:utf-8 -*-
+# 依赖安装: pip install websocket-client
+# level2 打板
 import math
 import sys
 import time
