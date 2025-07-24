@@ -42,7 +42,7 @@ if __name__ == '__main__':
         # 获取当前时间
         now = datetime.now().time()
         # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("14:55", "%H:%M").time()
+        target_time = datetime.strptime("17:55", "%H:%M").time()
         # 判断当前时间是否大于指定时间
         if now >= target_time:
             print(f'时间：{now} ================================ 超出时间范围')
