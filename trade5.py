@@ -21,7 +21,8 @@ def trade_data(results):
     flag = False
     df = pd.DataFrame(results)
     print(df)
-    df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
+    # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
+    df = df[(df['buy1_price'] >= round(float(df['zt_price'])*0.995, 2))]
     data = df.nsmallest(1, 'zt_price')
     # 如果数据为空，打印信息并继续
     if len(data) == 0:
