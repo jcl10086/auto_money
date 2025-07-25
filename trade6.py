@@ -36,7 +36,7 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.995).round(2)]
+    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.95).round(2)]
     data = df.nsmallest(1, 'zt_price')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -149,11 +149,11 @@ def buy_info(code, price, enable_balance, name, zt_price):
 def buy(data):
     zt_price = data['zt_price'].values[0]
     code = data['code']
-    price = data['buy1_price']
+    price = data['current_price']
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 30500
+    enable_balance = 30000
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
