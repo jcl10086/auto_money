@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='曾涨停，昨日未涨停，沪深主板非st', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='涨幅大于5，昨日未涨停，今日未涨停，沪深主板非st', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -105,16 +105,20 @@ def on_close(ws, code, msg):
 
 def parse_level2_data(data):
     results = []
-    code_part, values = data.split('=', 1)
-    code = code_part.replace('lv2_', '')
-    segments  = values.split('|')
-    last_segment = segments[-1]
-    current_price = last_segment.split(',')[2]
-    result ={
-        'code': code,
-        'current_price': current_price
-    }
-    results.append(result)
+    for line in data.strip().split('\n'):
+        key, value = line.split('=')
+        code = key.replace('lv2_', '')
+
+        # 获取最后一笔成交数据
+        last_record = value.split('|')[-1]  # 取最后一个成交记录
+        fields = last_record.split(',')  # 拆分字段
+
+        current_price = float(fields[2])  # 成交价格是第3项
+        result ={
+            'code': code,
+            'current_price': current_price
+        }
+        results.append(result)
     return results
 
 
