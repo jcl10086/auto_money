@@ -33,7 +33,7 @@ def sell(code, gd_price, enable_amount):
 
 # 发送订阅
 def on_open(ws):
-    ws.send("all=lv10_" + code[0])
+    ws.send("all=lv2_" + code[0])
 
 
 # 接收推送
@@ -87,7 +87,7 @@ ws = websocket.WebSocketApp(wsUrl,
 
 
 if __name__ == '__main__':
-    code = ['300987']
+    code = ['002542']
     gd_price = 20.95
     enable_amount = 1400
     compare_price = 21
