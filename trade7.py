@@ -36,7 +36,7 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.995).round(2)]
+    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.997).round(2)]
     data = df.nsmallest(1, 'zt_price')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='开盘涨跌幅>7，昨日未涨停，非st，创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='涨幅>7，未涨停，昨日未涨停，非st，创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -153,7 +153,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 40000
+    enable_balance = 28000
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
