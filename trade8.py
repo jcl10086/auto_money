@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='创业板，前日涨幅>5，昨日涨跌幅<2', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='创业板，前日涨幅>5，昨日涨跌幅<2，9点25价格>=9点24价格，开盘涨跌幅>-2且<1.5，股价<60', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -153,7 +153,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 80000
+    enable_balance = 69000
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
