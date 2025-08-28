@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='开盘涨跌幅>-2，昨日未涨停，前日未连板，沪深主板非st，流值小于120亿，股价>2.5且<25', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='开盘涨跌幅>0，昨日未涨停，前日未连板，沪深主板非st，流值小于120亿，股价>2.5且<25', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -171,7 +171,7 @@ if __name__ == '__main__':
         # 获取当前时间
         now = datetime.now().time()
         # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:33", "%H:%M").time()
+        target_time = datetime.strptime("09:34", "%H:%M").time()
         # 判断当前时间是否大于指定时间
         if now >= target_time:
             break
