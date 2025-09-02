@@ -87,8 +87,8 @@ ws = websocket.WebSocketApp(wsUrl,
 
 
 if __name__ == '__main__':
-    code = ['300588']
-    gd_price = 19.62
-    enable_amount = 3200
-    compare_price = 19.62
+    code = ['301378']
+    gd_price = 35.42
+    enable_amount = 1700
+    compare_price = 35.4
     ws.run_forever()
