@@ -18,7 +18,7 @@ cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_rand
 
 
 def get_codes():
-    df = pywencai.get(query='昨日涨跌幅<-1，开盘涨幅>=0，9点25价格>9点24价格，非京市，非st，非科创板，非创业板', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='昨日涨跌幅小于-5，非st，非京市，非科创板，9点25价格>9点24价格，开盘涨跌幅>0且<2', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
     return codes
 
@@ -64,7 +64,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 30000
+    enable_balance = 50000
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
