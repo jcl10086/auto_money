@@ -35,9 +35,10 @@ def trade_data(results):
     ts = current_time.strftime('%H:%M:%S.%f')[:-3]
     df['ts'] = ts
     print(df)
+    df['speed'] =  (df['current_price'] - df['open']) / df['open'] * 100
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[df['current_price'].astype(float) >= (df['open'].astype(float) * 1.005).round(2)]
-    data = df.nsmallest(1, 'zt_price')
+    df = df[(df['speed'] > 0.8)]
+    data = df.nlargest(1, 'speed')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
         # 执行买入操作
@@ -48,7 +49,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='创业板，前日涨幅>5，昨日涨跌幅<2，9点25价格>=9点24价格，开盘涨跌幅>-2且<1.5，股价<60', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='昨日涨跌幅小于-5，非st，非京市，非科创板，9点25价格>9点24价格，开盘涨跌幅>0且<2', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
