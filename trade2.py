@@ -64,7 +64,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 50000
+    enable_balance = 47500
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
