@@ -155,7 +155,11 @@ def buy(data):
     # enable_balance = 190000
     # enable_balance = get_balance()
     enable_balance = 69000
-    rs = buy_info(code, float(price), enable_balance, name, zt_price)
+    try:
+        rs = buy_info(code, float(price), enable_balance, name, zt_price)
+    except Exception as e:
+        print(e)
+        exit()
     return rs
 
 
