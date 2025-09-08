@@ -76,7 +76,7 @@ def parse_level2_data(data):
     return results
 
 
-wsUrl = "ws://121.43.57.182:21967/?token=fb6d25972a7bb566a74cf69c853e5d74"
+wsUrl = "ws://114.55.97.180:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
 ws = websocket.WebSocketApp(wsUrl,
@@ -87,8 +87,8 @@ ws = websocket.WebSocketApp(wsUrl,
 
 
 if __name__ == '__main__':
-    code = ['000665']
-    gd_price = 6.19
-    enable_amount = 8400
-    compare_price = 6.19
+    code = ['000980']
+    gd_price = 2.66
+    enable_amount = 17900
+    compare_price = 2.66
     ws.run_forever()
