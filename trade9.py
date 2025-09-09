@@ -46,7 +46,8 @@ def trade_data(results):
         flag = True
     return flag
 
-
+# 前日涨幅大于5，昨日涨跌幅小于2，创业板，9点25价格>=9点24价格，开盘涨跌幅>-2且开盘涨跌幅<2
+# 股价<30且>5，创业板，非st，昨日未涨停，9点25价格>=9点24价格，开盘涨跌幅>-2且开盘涨跌幅<2
 def get_codes():
     global codes
     df = pywencai.get(query='前日涨幅大于5，昨日涨跌幅小于2，创业板，9点25价格>=9点24价格，开盘涨跌幅>-2且开盘涨跌幅<2', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
@@ -176,7 +177,7 @@ if __name__ == '__main__':
         # 获取当前时间
         now = datetime.now().time()
         # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:30:25", "%H:%M:%S").time()
+        target_time = datetime.strptime("09:30:30", "%H:%M:%S").time()
         # 判断当前时间是否大于指定时间
         if now >= target_time:
             break
