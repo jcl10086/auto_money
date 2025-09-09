@@ -37,7 +37,7 @@ def trade_data(results):
     print(df)
     df['speed'] =  (df['current_price'] - df['open']) / df['open'] * 100
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[(df['speed'] > 0.8)]
+    df = df[(df['speed'] > 1.5)]
     data = df.nlargest(1, 'speed')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -49,7 +49,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='前日涨幅大于5，昨日涨跌幅小于2，创业板，开盘涨跌幅>0且开盘涨跌幅<2', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='前日涨幅大于5，昨日涨跌幅小于2，创业板，9点25价格>=9点24价格，开盘涨跌幅>-2且开盘涨跌幅<2', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -154,7 +154,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 69000
+    enable_balance = 46400
     try:
         rs = buy_info(code, float(price), enable_balance, name, zt_price)
     except Exception as e:
