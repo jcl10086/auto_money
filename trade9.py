@@ -37,7 +37,7 @@ def trade_data(results):
     print(df)
     df['speed'] =  (df['current_price'] - df['open']) / df['open'] * 100
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[(df['speed'] > 1.5)]
+    df = df[(df['speed'] >= 1) & (df['speed'] <= 2.5)]
     data = df.nlargest(1, 'speed')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -176,7 +176,7 @@ if __name__ == '__main__':
         # 获取当前时间
         now = datetime.now().time()
         # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:27", "%H:%M").time()
+        target_time = datetime.strptime("09:30:25", "%H:%M:%S").time()
         # 判断当前时间是否大于指定时间
         if now >= target_time:
             break
