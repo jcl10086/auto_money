@@ -124,7 +124,7 @@ def parse_level2_data(data):
     return results
 
 
-wsUrl = "ws://114.55.97.180:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
+wsUrl = "ws://47.99.245.84:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
 ws = websocket.WebSocketApp(wsUrl,
