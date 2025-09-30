@@ -37,7 +37,7 @@ def trade_data(results):
     print(df)
     df['speed'] =  (df['current_price'] - df['open']) / df['open'] * 100
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[(df['speed'] >= 0.5) & (df['speed'] <= 1.5)]
+    df = df[(df['speed'] >= 2) ]
     data = df.nlargest(1, 'speed')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -50,7 +50,7 @@ def trade_data(results):
 # 股价<30且>5，创业板，非st，昨日未涨停，9点25价格>=9点24价格，开盘涨跌幅>-2且开盘涨跌幅<2
 def get_codes():
     global codes
-    df = pywencai.get(query='沪深主板非st，昨日涨跌幅<-2，9点25价格>9点24价格，开盘涨跌幅>0且<9', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日未涨停，9点25价格>9点24价格，开盘涨跌幅>1且<5，流值小于120亿，股价<20且>4', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -124,7 +124,7 @@ def parse_level2_data(data):
     return results
 
 
-wsUrl = "ws://121.43.240.125:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
+wsUrl = "ws://47.118.20.95:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
 ws = websocket.WebSocketApp(wsUrl,
@@ -155,7 +155,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 41000
+    enable_balance = 108000
     try:
         rs = buy_info(code, float(price), enable_balance, name, zt_price)
     except Exception as e:
@@ -177,7 +177,7 @@ if __name__ == '__main__':
         # 获取当前时间
         now = datetime.now().time()
         # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:27:00", "%H:%M:%S").time()
+        target_time = datetime.strptime("09:30:00", "%H:%M:%S").time()
         # 判断当前时间是否大于指定时间
         if now >= target_time:
             break
