@@ -36,7 +36,7 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.997).round(2)]
+    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.992).round(2)]
     data = df.nsmallest(1, 'zt_price')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='涨幅>7，未涨停，昨日未涨停，非st，创业板，股价<50', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日未涨停，9点25价格>9点24价格，开盘涨跌幅>1且<5，流值小于120亿，股价<15且>3', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -122,7 +122,7 @@ def parse_level2_data(data):
     return results
 
 
-wsUrl = "ws://121.43.57.182:21967/?token=fb6d25972a7bb566a74cf69c853e5d74"
+wsUrl = "ws://47.114.101.168:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
 ws = websocket.WebSocketApp(wsUrl,

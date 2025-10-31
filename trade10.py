@@ -177,7 +177,7 @@ if __name__ == '__main__':
         # 获取当前时间
         now = datetime.now().time()
         # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:30:00", "%H:%M:%S").time()
+        target_time = datetime.strptime("09:27:00", "%H:%M:%S").time()
         # 判断当前时间是否大于指定时间
         if now >= target_time:
             break
