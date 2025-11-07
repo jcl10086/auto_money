@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='沪深主板非st，昨日未涨停，9点25价格>9点24价格，开盘涨跌幅>2且<5，流值小于120亿，股价<15且>3', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日未涨停，当前涨幅>2且<8，流值小于80亿，股价<18且>3', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
