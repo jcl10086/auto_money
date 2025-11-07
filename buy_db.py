@@ -48,7 +48,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='沪深主板非st，昨日未涨停，当前涨幅>2且<8，流值小于80亿，股价<18且>3', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日未涨停，当前涨幅>2.5且<8，流值小于80亿，股价<18且>3', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -122,7 +122,7 @@ def parse_level2_data(data):
     return results
 
 
-wsUrl = "ws://47.114.101.168:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
+wsUrl = "ws://42.120.18.224:21960/ws/cn/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
 ws = websocket.WebSocketApp(wsUrl,
@@ -153,7 +153,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 96000
+    enable_balance = 131000
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
