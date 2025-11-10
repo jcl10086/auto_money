@@ -7,12 +7,14 @@ import time
 from datetime import datetime
 
 import pandas as pd
+import requests
 import websocket
 import zlib
 import easytrader
 # 初始化账号
 user = easytrader.use('eastmoney')
 user.prepare('account.json')
+wsUrl = ''
 
 
 def trade_data(results):
@@ -76,7 +78,7 @@ def parse_level2_data(data):
     return results
 
 
-wsUrl = "ws://114.55.97.180:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
+# wsUrl = "ws://114.55.97.180:21966/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
 ws = websocket.WebSocketApp(wsUrl,
@@ -86,7 +88,18 @@ ws = websocket.WebSocketApp(wsUrl,
                             on_close=on_close)
 
 
+def get_wsurl():
+    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=fb6d25972a7bb566a74cf69c853e5d74"
+    payload = {}
+    headers = {}
+    response = requests.request("GET", url, headers=headers, data=payload)
+    wsUrl = response.json()['server'] + '/?token=fb6d25972a7bb566a74cf69c853e5d74'
+    return wsUrl
+
+
+
 if __name__ == '__main__':
+    wsUrl = get_wsurl()
     code = ['000980']
     gd_price = 2.66
     enable_amount = 17900
