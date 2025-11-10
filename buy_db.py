@@ -27,6 +27,16 @@ codes = []
 my_df = None
 wsUrl = ''
 
+
+def get_wsurl():
+    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=fb6d25972a7bb566a74cf69c853e5d74"
+    payload = {}
+    headers = {}
+    response = requests.request("GET", url, headers=headers, data=payload)
+    wsUrl = response.json()['server'] + '/?token=fb6d25972a7bb566a74cf69c853e5d74'
+    return wsUrl
+
+
 def trade_data(results):
     flag = False
     df = pd.DataFrame(results)
@@ -124,6 +134,7 @@ def parse_level2_data(data):
     return results
 
 
+wsUrl = get_wsurl()
 # wsUrl = "ws://42.120.18.224:21960/ws/cn/?token=fb6d25972a7bb566a74cf69c853e5d74"
 #分配服务器方法请参考：jvQuant.com/wiki/开始使用/分配服务器.html
 
@@ -168,17 +179,7 @@ def get_balance():
     return enable_balance
 
 
-def get_wsurl():
-    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=fb6d25972a7bb566a74cf69c853e5d74"
-    payload = {}
-    headers = {}
-    response = requests.request("GET", url, headers=headers, data=payload)
-    wsUrl = response.json()['server'] + '/?token=fb6d25972a7bb566a74cf69c853e5d74'
-    return wsUrl
-
-
 if __name__ == '__main__':
-    wsUrl = get_wsurl()
     while True:
         # 获取当前时间
         now = datetime.now().time()

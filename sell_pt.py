@@ -35,6 +35,7 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
+    print(f"==========最大值：{max_price}===============差值：{cp_zf}")
     if cp_zf > 2:
         gd_price = round(results[0]['current_price'] * 0.998, 2)
         # 执行卖出入操作
