@@ -15,6 +15,7 @@ import easytrader
 user = easytrader.use('eastmoney')
 user.prepare('account.json')
 wsUrl = ''
+max_price = 0
 
 
 def trade_data(results):
@@ -24,7 +25,9 @@ def trade_data(results):
     ts = current_time.strftime('%H:%M:%S.%f')[:-3]
     df['ts'] = ts
     print(df)
-    if results[0]['current_price'] < compare_price:
+    cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
+    if cp_zf > 2:
+        gd_price = round(results[0]['current_price'] * 0.998, 2)
         # 执行卖出入操作
         sell(code, gd_price, enable_amount)
         flag = True
@@ -60,6 +63,7 @@ def on_close(ws, code, msg):
 
 
 def parse_level2_data(data):
+    global max_price
     results = []
     for line in data.strip().split('\n'):
         key, value = line.split('=')
@@ -70,6 +74,8 @@ def parse_level2_data(data):
         fields = last_record.split(',')  # 拆分字段
 
         current_price = float(fields[2])  # 成交价格是第3项
+        if current_price > max_price:
+            max_price = current_price
         result ={
             'code': code,
             'current_price': current_price
@@ -100,8 +106,8 @@ def get_wsurl():
 
 if __name__ == '__main__':
     wsUrl = get_wsurl()
-    code = ['000980']
+    code = ['002927']
     gd_price = 2.66
-    enable_amount = 17900
+    enable_amount = 7100
     compare_price = 2.66
     ws.run_forever()
