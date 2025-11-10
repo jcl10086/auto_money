@@ -173,7 +173,7 @@ def get_wsurl():
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
-    wsUrl = response.json()['server']
+    wsUrl = response.json()['server'] + '/?token=fb6d25972a7bb566a74cf69c853e5d74'
     return wsUrl
 
 
