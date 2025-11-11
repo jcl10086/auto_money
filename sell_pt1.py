@@ -35,8 +35,9 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
-    print(f"==========最大值：{max_price}===============差值：{cp_zf}")
-    if cp_zf > 2:
+    yz_zf = (max_price - last_close_price) / last_close_price * 100
+    print(f"==========最大值：{max_price}==========差值：{cp_zf}==========阈值：{yz_zf}")
+    if cp_zf > 2 and yz_zf > 3:
         gd_price = round(results[0]['current_price'] * 0.998, 2)
         # 执行卖出入操作
         sell(code, gd_price, enable_amount)
@@ -108,8 +109,8 @@ ws = websocket.WebSocketApp(wsUrl,
 
 
 if __name__ == '__main__':
-    code = ['002927']
-    gd_price = 2.66
-    enable_amount = 7100
-    compare_price = 2.66
+    code = ['600477']
+    enable_amount = 29200
+    # 昨日收盘价
+    last_close_price = 3.1
     ws.run_forever()
