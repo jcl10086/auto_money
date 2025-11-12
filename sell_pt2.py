@@ -37,7 +37,7 @@ def trade_data(results):
     cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
     yz_zf = (max_price - last_close_price) / last_close_price * 100
     print(f"==========最大值：{max_price}==========差值：{cp_zf}==========阈值：{yz_zf}")
-    if cp_zf > 2 and yz_zf > 3:
+    if cp_zf > 2 and yz_zf > 4:
         gd_price = round(results[0]['current_price'] * 0.998, 2)
         # 执行卖出入操作
         sell(code, gd_price, enable_amount)
