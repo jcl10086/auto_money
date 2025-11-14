@@ -26,6 +26,8 @@ cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_rand
 codes = []
 my_df = None
 wsUrl = ''
+count = 0
+stop_flag = False
 
 
 def get_wsurl():
@@ -95,15 +97,22 @@ def on_open(ws):
 
 # 接收推送
 def on_message(ws, message, type, flag):
+    global count
+    global stop_flag
     # 命令返回文本消息
     if type == websocket.ABNF.OPCODE_TEXT:
         print(time.strftime('%H:%M:%S', time.localtime(time.time())), "Text响应:", message)
     # 行情推送压缩二进制消息，在此解压缩
     if type == websocket.ABNF.OPCODE_BINARY:
+        count = count + 1
+        print(f"================执行次数：{count}================")
         rb = zlib.decompress(message, -zlib.MAX_WBITS)
         # print(time.strftime('%H:%M:%S', time.localtime(time.time())), "Binary响应:", rb.decode("utf-8"))
+        if count >= 200:
+            ws.close()
         results = parse_level2_data(rb.decode("utf-8"))
         if trade_data(results):
+            stop_flag = True
             exit()
 
 
@@ -180,29 +189,21 @@ def get_balance():
 
 
 if __name__ == '__main__':
-    while True:
-        # 获取当前时间
-        now = datetime.now().time()
-        # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:27", "%H:%M").time()
-        # 判断当前时间是否大于指定时间
-        if now >= target_time:
-            break
-        time.sleep(5)
-
-    codes = get_codes()
-    my_df = get_data(codes)
-    print(f'=====共有{len(codes)}只股票=====')
-    ws.run_forever()
     # while True:
-    #     ws.run_forever()
-    #     # 获取数据
-    #     # data = get_data(codes)
-    #     # 如果数据为空，打印信息并继续
-    #     if len(data) == 0:
-    #         time.sleep(0.5)
-    #         print(f'====执行====')
-    #         continue
-    #     # 执行买入操作
-    #     buy(data)
-    #     break
+    #     # 获取当前时间
+    #     now = datetime.now().time()
+    #     # 设定一个指定的时间点，比如 14:30
+    #     target_time = datetime.strptime("09:27", "%H:%M").time()
+    #     # 判断当前时间是否大于指定时间
+    #     if now >= target_time:
+    #         break
+    #     time.sleep(5)
+
+    while True:
+        codes = get_codes()
+        my_df = get_data(codes)
+        print(f'=====共有{len(codes)}只股票=====')
+        ws.run_forever()
+        if stop_flag:
+            break
+        count = 0
