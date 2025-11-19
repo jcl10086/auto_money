@@ -1,7 +1,7 @@
 #!python3
 # -*- coding:utf-8 -*-
 # 依赖安装: pip install websocket-client
-# level2 打板  逐笔成交   创业板
+# level2 打二板  逐笔成交   创业板
 import math
 import sys
 import time
@@ -26,6 +26,8 @@ cookie = 'other_uid=Ths_iwencai_Xuangu_hg54pqsca5cpwxmxubzrnmu9gxl5bzmx; ta_rand
 codes = []
 my_df = None
 wsUrl = ''
+count = 0
+stop_flag = False
 
 
 def get_wsurl():
@@ -48,7 +50,7 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.95).round(2)]
+    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.992).round(2)]
     data = df.nsmallest(1, 'zt_price')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -60,7 +62,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='`沪深主板非st，昨日未涨停，当前涨幅>1且<3，流值小于60亿，股价<15且>3，无可转债`', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日首板，开盘涨幅>6且<9', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -95,15 +97,22 @@ def on_open(ws):
 
 # 接收推送
 def on_message(ws, message, type, flag):
+    global count
+    global stop_flag
     # 命令返回文本消息
     if type == websocket.ABNF.OPCODE_TEXT:
         print(time.strftime('%H:%M:%S', time.localtime(time.time())), "Text响应:", message)
     # 行情推送压缩二进制消息，在此解压缩
     if type == websocket.ABNF.OPCODE_BINARY:
+        count = count + 1
+        print(f"================执行次数：{count}================")
         rb = zlib.decompress(message, -zlib.MAX_WBITS)
         # print(time.strftime('%H:%M:%S', time.localtime(time.time())), "Binary响应:", rb.decode("utf-8"))
+        if count >= 200:
+            ws.close()
         results = parse_level2_data(rb.decode("utf-8"))
         if trade_data(results):
+            stop_flag = True
             exit()
 
 
@@ -166,7 +175,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 114000
+    enable_balance = 83100
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
@@ -180,29 +189,21 @@ def get_balance():
 
 
 if __name__ == '__main__':
-    while True:
-        # 获取当前时间
-        now = datetime.now().time()
-        # 设定一个指定的时间点，比如 14:30
-        target_time = datetime.strptime("09:27", "%H:%M").time()
-        # 判断当前时间是否大于指定时间
-        if now >= target_time:
-            break
-        time.sleep(5)
-
-    codes = get_codes()
-    my_df = get_data(codes)
-    print(f'=====共有{len(codes)}只股票=====')
-    ws.run_forever()
     # while True:
-    #     ws.run_forever()
-    #     # 获取数据
-    #     # data = get_data(codes)
-    #     # 如果数据为空，打印信息并继续
-    #     if len(data) == 0:
-    #         time.sleep(0.5)
-    #         print(f'====执行====')
-    #         continue
-    #     # 执行买入操作
-    #     buy(data)
-    #     break
+    #     # 获取当前时间
+    #     now = datetime.now().time()
+    #     # 设定一个指定的时间点，比如 14:30
+    #     target_time = datetime.strptime("09:27", "%H:%M").time()
+    #     # 判断当前时间是否大于指定时间
+    #     if now >= target_time:
+    #         break
+    #     time.sleep(5)
+
+    while True:
+        codes = get_codes()
+        my_df = get_data(codes)
+        print(f'=====共有{len(codes)}只股票=====')
+        ws.run_forever()
+        if stop_flag:
+            break
+        count = 0
