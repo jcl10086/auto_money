@@ -31,11 +31,11 @@ stop_flag = False
 
 
 def get_wsurl():
-    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=fb6d25972a7bb566a74cf69c853e5d74"
+    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=d0f634a78bd231780cdf0ceb131942ed"
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
-    wsUrl = response.json()['server'] + '/?token=fb6d25972a7bb566a74cf69c853e5d74'
+    wsUrl = response.json()['server'] + '/?token=d0f634a78bd231780cdf0ceb131942ed'
     return wsUrl
 
 
