@@ -31,11 +31,11 @@ stop_flag = False
 
 
 def get_wsurl():
-    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=d0f634a78bd231780cdf0ceb131942ed"
+    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=72ecd45a88652271818f3e8411c11e0a"
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
-    wsUrl = response.json()['server'] + '/?token=d0f634a78bd231780cdf0ceb131942ed'
+    wsUrl = response.json()['server'] + '/?token=72ecd45a88652271818f3e8411c11e0a'
     return wsUrl
 
 
@@ -62,7 +62,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='沪深主板非st，昨日首板，开盘涨幅>6且<9', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日首板，开盘涨幅>6且<9，涨幅<9.5', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -175,7 +175,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 81000
+    enable_balance = 82900
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 

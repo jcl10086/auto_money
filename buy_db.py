@@ -31,11 +31,11 @@ stop_flag = False
 
 
 def get_wsurl():
-    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=d0f634a78bd231780cdf0ceb131942ed"
+    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=72ecd45a88652271818f3e8411c11e0a"
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
-    wsUrl = response.json()['server'] + '/?token=d0f634a78bd231780cdf0ceb131942ed'
+    wsUrl = response.json()['server'] + '/?token=72ecd45a88652271818f3e8411c11e0a'
     return wsUrl
 
 
@@ -175,7 +175,7 @@ def buy(data):
     name = ''
     # enable_balance = 190000
     # enable_balance = get_balance()
-    enable_balance = 81000
+    enable_balance = 82900
     rs = buy_info(code, float(price), enable_balance, name, zt_price)
     return rs
 
