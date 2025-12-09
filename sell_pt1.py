@@ -19,11 +19,11 @@ max_price = 0
 
 
 def get_wsurl():
-    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=fb6d25972a7bb566a74cf69c853e5d74"
+    url = "http://jvQuant.com/query/server?market=ab&type=websocket&token=72ecd45a88652271818f3e8411c11e0a"
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
-    wsUrl = response.json()['server'] + '/?token=fb6d25972a7bb566a74cf69c853e5d74'
+    wsUrl = response.json()['server'] + '/?token=72ecd45a88652271818f3e8411c11e0a'
     return wsUrl
 
 
@@ -34,11 +34,10 @@ def trade_data(results):
     ts = current_time.strftime('%H:%M:%S.%f')[:-3]
     df['ts'] = ts
     print(df)
-    cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
-    yz_zf = (max_price - last_close_price) / last_close_price * 100
-    print(f"==========最大值：{max_price}==========差值：{cp_zf}==========阈值：{yz_zf}")
-    if cp_zf > 2 and yz_zf > 4:
-        gd_price = round(results[0]['current_price'] * 0.998, 2)
+    # cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
+    # print(f"==========最大值：{max_price}===============差值：{cp_zf}")
+    if results[0]['current_price'] < compare_price:
+        gd_price = round(results[0]['current_price'] * 0.995, 2)
         # 执行卖出入操作
         sell(code, gd_price, enable_amount)
         flag = True
@@ -109,8 +108,8 @@ ws = websocket.WebSocketApp(wsUrl,
 
 
 if __name__ == '__main__':
-    code = ['600477']
-    enable_amount = 29200
-    # 昨日收盘价
-    last_close_price = 3.1
+    code = ['002927']
+    gd_price = 2.66
+    enable_amount = 7100
+    compare_price = 2.66
     ws.run_forever()
