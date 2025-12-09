@@ -129,6 +129,7 @@ def parse_level2_data(data):
     results = []
     for line in data.strip().split('\n'):
         key, value = line.split('=')
+        current_count = sum(int(trans.split(',')[-1]) for trans in line.split('=')[1].split('|')) # 交易量
         code = key.replace('lv2_', '')
 
         # 获取最后一笔成交数据
@@ -136,7 +137,6 @@ def parse_level2_data(data):
         fields = last_record.split(',')  # 拆分字段
 
         current_price = float(fields[2])  # 成交价格是第3项
-        current_count = float(fields[3])  # 交易量是第4项
         result ={
             'code': code,
             'current_price': current_price,
