@@ -37,7 +37,7 @@ def trade_data(results):
     # cp_zf = (max_price - results[0]['current_price']) / results[0]['current_price'] * 100
     # print(f"==========最大值：{max_price}===============差值：{cp_zf}")
     if results[0]['current_price'] < compare_price:
-        gd_price = round(results[0]['current_price'] * 0.995, 2)
+        gd_price = round(results[0]['current_price'] * 0.997, 2)
         # 执行卖出入操作
         sell(code, gd_price, enable_amount)
         flag = True
@@ -109,7 +109,7 @@ ws = websocket.WebSocketApp(wsUrl,
 
 if __name__ == '__main__':
     code = ['600493']
-    gd_price = 2.66
+    # gd_price = 2.66
     enable_amount = 10200
     compare_price = 8.3
     ws.run_forever()
