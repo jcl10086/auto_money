@@ -50,7 +50,7 @@ def trade_data(results):
     df['ts'] = ts
     print(df)
     # df = df[(df['buy1_price'] == df['zt_price']) & (df['buy1_quantity'] > 5000000)]
-    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.992).round(2)]
+    df = df[df['current_price'].astype(float) >= (df['zt_price'].astype(float) * 0.952).round(2)]
     data = df.nsmallest(1, 'zt_price')
     # 如果数据为空，打印信息并继续
     if len(data) > 0:
@@ -62,7 +62,7 @@ def trade_data(results):
 
 def get_codes():
     global codes
-    df = pywencai.get(query='沪深主板非st，昨日未涨停，开盘涨幅>6且<9，流值小于120亿', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
+    df = pywencai.get(query='沪深主板非st，昨日未涨停，前日未涨停，当前涨幅>1且<5，流值小于80亿，股价<9且>3，无可转债，今日最大涨幅<11', loop=True, sort_order='desc', sort_key='最新涨跌幅', pro=True, cookie=cookie)
     codes = df['code'].values.tolist()
 
     # 移除数组
@@ -156,7 +156,7 @@ ws = websocket.WebSocketApp(wsUrl,
 
 def buy_info(code, price, enable_balance, name, zt_price):
     # 挂单股价
-    gd_price = price * 1.01
+    gd_price = price * 1.005
     gd_price = round(gd_price, 2)
     if gd_price >= zt_price:
         gd_price = zt_price
