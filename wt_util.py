@@ -22,7 +22,7 @@ def resolve_data(data, zt_price):
     # 筛选条件：类型为"B"且交易量>5000
     filtered_list = [
         record for record in data["data"]["list"]
-        if record[3] == "B" and record[2] > 100000  and record[1] == zt_price
+        if record[3] == "B" and record[2] > 200000  and record[1] == zt_price
     ]
     return filtered_list
 
